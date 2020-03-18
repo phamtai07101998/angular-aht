@@ -27,7 +27,7 @@
     "datatables.net-bs4": "^1.10.20",
     "datatables.net-dt": "^1.10.20",
     "hammerjs": "^2.0.8",
-    "jquery": "^1.9.1",
+    "jquery": "^3.4.0",
     "jquery-datetimepicker": "^2.5.21",
     "ngx-bootstrap": "^5.5.0",
     "popper.js": "^1.12.3",
