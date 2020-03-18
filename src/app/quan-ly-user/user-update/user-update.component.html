@@ -1,0 +1,40 @@
+<h3>Create Employee</h3>
+<div [hidden]="submit" style="width: 400px;">
+  <form (ngSubmit)="onSubmit()" >
+    <div class="form-group">
+      <label for="name">User name</label>
+      <input type="text" class="form-control" id="userName" required [(ngModel)] = "userName"
+        name="userName">
+        <!-- <p *ngIf="userRole.user.userName">{{userRole.user.userName}}</p> -->
+    </div>
+
+    <div class="form-group">
+      <label for="name">PassWord</label>
+      <input type="text" class="form-control" id="userPass" required [(ngModel)] = "user.userPass"
+        name="userPass">
+    </div>
+
+    <div class="form-group">
+      <label for="name">Email</label>
+      <input type="text" class="form-control" id="userMail" required [(ngModel)]="user.userMail"
+        name="userMail">
+    </div>
+
+    <div class="form-group">
+      <label for="sel1">Role</label>
+      <select class="form-control" id="sel1" name="roleId" onchange="myFunction()" [(ngModel)]="roleSelectd">
+        <option *ngFor="let role of roles | async" [value]="role.roleId">{{role.roleName}}</option>
+      </select>
+    </div>
+
+    <p id="demo"></p>
+    <br />
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+</div>
+
+<div [hidden]="!submit">
+  <h4>You submitted successfully!</h4>
+  <!-- <button class="btn btn-success" (click)="newEmployee()">Add</button> -->
+</div>
+

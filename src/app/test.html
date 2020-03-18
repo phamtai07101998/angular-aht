@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+
+	<script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+
+
+	<script type="text/javascript">
+		const getBtn = document.getElementById('btn');
+		function getData() {
+			var xhttp = new XMLHttpRequest();
+			xhttp.open("get", "http://localhost:8082/rest/user", true);
+			xhttp.onload = function(){
+				console.log(this);
+			};
+			
+			xhttp.send();
+		}
+
+		getBtn.addEventListener('click', getData)
+	</script>
+</body>
+</html>

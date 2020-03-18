@@ -1,0 +1,299 @@
+<div class="row">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="page-header">
+            <h2 class="pageheader-title">Data Tables</h2>
+            <p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta, fusce sit amet
+                vestibulum
+                mi. Morbi lobortis pulvinar quam.</p>
+            <div class="page-breadcrumb">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Tables</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Data Tables</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- end pageheader -->
+<!-- ============================================================== -->
+<div class="row">
+    <!-- ============================================================== -->
+    <!-- basic table  -->
+    <!-- ============================================================== -->
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="card">
+            <h5 class="card-header">Quản lý Khóa Đào Tạo</h5>
+            <div class="card-body">
+                <button class="btn btn-primary" style="margin-bottom: 5px;" (click)="trainingExpier()">Khoa Hoc Ket Thuc</button>
+                <button class="btn btn-primary" style="margin-bottom: 5px; margin-left: 5px;" (click)="load()">Khoa Hoc</button>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered first" id="datatable">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Mã Khóa Đào Tạo</th>
+                                <th>Tên Khóa Đào Tạo</th>
+                                <th>Ngày Bắt Đầu</th>
+                                <th>Ngày Kết Thúc</th>
+                                <th>Trạng Thái</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let training of trainings | async" [ngSwitch]="training.trainingStatus">
+                                <td>{{count()}}</td>
+                                <td>{{training.trainingCode}}</td>
+                                <td>{{training.trainingName}}</td>
+                                <td>{{training.trainingStartDate}}</td>
+                                <td>{{training.trainingStartEnd}}</td>
+                                <td *ngSwitchCase="0">Tồn Tại</td>
+                                <td *ngSwitchCase="1">Kết Thúc</td>
+                                <td>
+                                    <i class="fas fa-edit" (click)="find(training.trainingId)" data-toggle="modal"
+                                        data-target="#update"
+                                        style="cursor: pointer; font-size:24px; padding-right: 5px;"></i>
+                                    <i class="fa fa-trash" aria-hidden="true"
+                                        style="font-size:24px; cursor: pointer; padding-right: 5px;"
+                                        (click)="delete(training.trainingId)"></i>
+                                    <i class="fa fa-align-justify" style="font-size:24px; cursor: pointer;"
+                                        (click)="trainingEmpDetail(training.trainingId)"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <a routerLink="add" class="nav-link" routerLinkActive="active"> -->
+                    <button color="primary" mat-raised-button style="margin-top: 5px;" data-toggle="modal"
+                        data-target="#exModal" data-whatever="@mdo" id="btnThem" (click)="count()">
+                        <i class="fa fa-plus" aria-hidden="true" style="padding-right: 5px;"></i>Thêm</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- end basic table  -->
+    <!-- ============================================================== -->
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="exModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thêm Khoá Đào Tạo </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form (ngSubmit)="create()" name="form" [formGroup]="form" novalidate>
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <!-- <label for="name">Mã Khóa Đào Tạo</label>
+                                <input type="text" class="form-control" formControlName="trainingCode"
+                                    [ngClass]="{'is-invalid':form.get('trainingCode').touched && form.get('trainingCode').invalid}"
+                                    required> -->
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Mã Khóa Đào Tạo</mat-label>
+                                    <input matInput formControlName="trainingCode"
+                                        [ngClass]="{'is-invalid':form.get('trainingCode').touched && form.get('trainingCode').invalid}"
+                                        required>
+
+                                    <mat-error *ngIf="form.get('trainingCode').errors">
+                                        Không được trống
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 ml-auto">
+                            <div class="form-group">
+                                <!-- <label for="name">Tên Khóa Đào Tạo</label>
+                                <input type="text" class="form-control" formControlName="trainingName"
+                                    [ngClass]="{'is-invalid':form.get('trainingName').touched && form.get('trainingName').invalid}"
+                                    required> -->
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Tên Khóa Đào Tạo</mat-label>
+                                    <input matInput formControlName="trainingName"
+                                        [ngClass]="{'is-invalid':form.get('trainingName').touched && form.get('trainingName').invalid}"
+                                        required>
+
+                                    <mat-error *ngIf="form.get('trainingName').errors">
+                                        Không được trống
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <!-- <label for="name">Ngày Bắt Đầu</label>
+                                <input type="text" id="datepicker1" class="form-control"
+                                    formControlName="trainingStartDate"
+                                    [ngClass]="{'is-invalid':form.get('trainingStartDate').touched && form.get('trainingStartDate').invalid}"
+                                    required> -->
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Ngày Bắt Đầu</mat-label>
+                                    <input matInput formControlName="trainingStartDate" bsDatepicker
+                                        [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }"
+                                        [ngClass]="{'is-invalid':form.get('trainingStartDate').touched && form.get('trainingStartDate').invalid}"
+                                        required>
+
+                                    <mat-error *ngIf="form.get('trainingStartDate').errors">
+                                        Không được trống
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 ml-auto">
+                            <div class="form-group">
+                                <!-- <label for="name">Ngày Kết Thúc</label>
+                                <input type="date" class="form-control" formControlName="trainingStartEnd"
+                                    [ngClass]="{'is-invalid':form.get('trainingStartEnd').touched && form.get('trainingStartEnd').invalid}"
+                                    required> -->
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Ngày Kết Thúc</mat-label>
+                                    <input matInput formControlName="trainingStartEnd" bsDatepicker
+                                        [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }"
+                                        [ngClass]="{'is-invalid':form.get('trainingStartEnd').touched && form.get('trainingStartEnd').invalid}"
+                                        required>
+
+                                    <mat-error *ngIf="form.get('trainingStartEnd').errors">
+                                        Không được trống
+                                    </mat-error>
+                                </mat-form-field>
+                                <p class="alert alert-primary" role="alert" *ngIf="form.errors">Ngày kết thúc phải lớn
+                                    hơn</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Form Status: {{form.status | json}}</p>
+
+                    <button type="submit" class="btn btn-success" style="margin-right: 5px;"
+                        [disabled]="form.status=='INVALID'">Thêm</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="reset()">Đóng</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" id="update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thêm Khoá Đào Tạo </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form (ngSubmit)="show()" name="form" [formGroup]="form" novalidate>
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <!-- <label for="name">Mã Khóa Đào Tạo</label>
+                                <input type="text" class="form-control" formControlName="trainingCode"
+                                    [ngClass]="{'is-invalid':form.get('trainingCode').touched && form.get('trainingCode').invalid}"
+                                    required> -->
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Mã Khóa Đào Tạo</mat-label>
+                                    <input matInput formControlName="trainingCode"
+                                        [ngClass]="{'is-invalid':form.get('trainingCode').touched && form.get('trainingCode').invalid}"
+                                        required>
+
+                                    <mat-error *ngIf="form.get('trainingCode').errors">
+                                        Không được trống
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 ml-auto">
+                            <div class="form-group">
+                                <!-- <label for="name">Tên Khóa Đào Tạo</label>
+                                <input type="text" class="form-control" formControlName="trainingName"
+                                    [ngClass]="{'is-invalid':form.get('trainingName').touched && form.get('trainingName').invalid}"
+                                    required> -->
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Tên Khóa Đào Tạo</mat-label>
+                                    <input matInput formControlName="trainingName"
+                                        [ngClass]="{'is-invalid':form.get('trainingName').touched && form.get('trainingName').invalid}"
+                                        required>
+
+                                    <mat-error *ngIf="form.get('trainingName').errors">
+                                        Không được trống
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <!-- <label for="name">Ngày Bắt Đầu</label>
+                                <input type="text" id="datepicker1" class="form-control"
+                                    formControlName="trainingStartDate"
+                                    [ngClass]="{'is-invalid':form.get('trainingStartDate').touched && form.get('trainingStartDate').invalid}"
+                                    required> -->
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Ngày Bắt Đầu</mat-label>
+                                    <input matInput formControlName="trainingStartDate" bsDatepicker
+                                        [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }"
+                                        [ngClass]="{'is-invalid':form.get('trainingStartDate').touched && form.get('trainingStartDate').invalid}"
+                                        required>
+
+                                    <mat-error *ngIf="form.get('trainingStartDate').errors">
+                                        Không được trống
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 ml-auto">
+                            <div class="form-group">
+                                <!-- <label for="name">Ngày Kết Thúc</label>
+                                <input type="date" class="form-control" formControlName="trainingStartEnd"
+                                    [ngClass]="{'is-invalid':form.get('trainingStartEnd').touched && form.get('trainingStartEnd').invalid}"
+                                    required> -->
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Ngày Kết Thúc</mat-label>
+                                    <input matInput formControlName="trainingStartEnd" bsDatepicker
+                                        [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }"
+                                        [ngClass]="{'is-invalid':form.get('trainingStartEnd').touched && form.get('trainingStartEnd').invalid}"
+                                        required>
+
+                                    <mat-error *ngIf="form.get('trainingStartEnd').errors">
+                                        Không được trống
+                                    </mat-error>
+
+                                </mat-form-field>
+                                <p class="alert alert-danger" *ngIf="form.errors">Ngày kết thúc phải lớn hơn</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Form Status: {{form.status | json}}</p>
+
+
+                    <button type="submit" class="btn btn-success" style="margin-right: 5px;"
+                        [disabled]="form.status=='INVALID'">Thêm</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="reset()">Đóng</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
